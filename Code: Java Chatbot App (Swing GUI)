@@ -1,0 +1,70 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class ChatbotApp extends JFrame {
+    private JTextArea chatArea;
+    private JTextField inputField;
+    private JButton sendButton;
+
+    public ChatbotApp() {
+        setTitle("Java Chatbot");
+        setSize(500, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        // Chat display area
+        chatArea = new JTextArea();
+        chatArea.setEditable(false);
+        chatArea.setLineWrap(true);
+        add(new JScrollPane(chatArea), BorderLayout.CENTER);
+
+        // Input field and send button panel
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BorderLayout());
+        inputField = new JTextField();
+        sendButton = new JButton("Send");
+
+        inputPanel.add(inputField, BorderLayout.CENTER);
+        inputPanel.add(sendButton, BorderLayout.EAST);
+        add(inputPanel, BorderLayout.SOUTH);
+
+        // Send message on button click
+        sendButton.addActionListener(e -> sendMessage());
+
+        // Send message on Enter key
+        inputField.addActionListener(e -> sendMessage());
+
+        setVisible(true);
+    }
+
+    private void sendMessage() {
+        String userText = inputField.getText().trim();
+        if (userText.isEmpty()) return;
+
+        chatArea.append("You: " + userText + "\n");
+        inputField.setText("");
+
+        // Simulate bot response
+        String botResponse = getBotResponse(userText);
+        chatArea.append("Bot: " + botResponse + "\n");
+    }
+
+    // Simple rule-based response
+    private String getBotResponse(String input) {
+        input = input.toLowerCase();
+        if (input.contains("hello") || input.contains("hi")) {
+            return "Hello! How can I help you?";
+        } else if (input.contains("your name")) {
+            return "I'm JavaBot!";
+        } else if (input.contains("bye")) {
+            return "Goodbye! Have a great day!";
+        } else {
+            return "Sorry, I didn't understand that.";
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(ChatbotApp::new);
+    }
+}
